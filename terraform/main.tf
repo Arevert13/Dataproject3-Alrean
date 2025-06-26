@@ -22,7 +22,7 @@ provider "google" {
 }
 
 module "network" {
-  source        = "./modules/aws_network"
+  source        = "./aws_network"
   vpc_cidr      = var.vpc_cidr
   private1_cidr = var.private1_cidr
   private2_cidr = var.private2_cidr
@@ -31,7 +31,7 @@ module "network" {
 }
 
 module "rds" {
-  source     = "./modules/rds"
+  source     = "./rds"
   vpc_id     = module.network.vpc_id
   subnet_ids = module.network.private_subnet_ids
   db_name    = var.db_name
@@ -40,7 +40,7 @@ module "rds" {
 }
 
 module "lambdas" {
-  source            = "./modules/lambdas"
+  source            = "./lambdas"
   subnet_ids        = module.network.private_subnet_ids
   security_group_id = module.rds.security_group_id
   db_host           = module.rds.address
@@ -51,7 +51,7 @@ module "lambdas" {
 }
 
 module "cloud_run" {
-  source           = "./modules/cloud_run"
+  source           = "./cloud_run"
   region           = var.region
   project_id       = var.project_id
   flask_dir        = var.flask_dir
@@ -61,7 +61,7 @@ module "cloud_run" {
 }
 
 module "bigquery" {
-  source              = "./modules/bigquery"
+  source              = "./bigquery"
   project_id          = var.project_id
   region              = var.region
   project_name        = var.project_name
