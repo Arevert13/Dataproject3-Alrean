@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <title>Products</title>
+</head>
+<body>
+  <h1>Available Products</h1>
+  <ul>
+    {% for product in products %}
+    <li>
+      {{ product.name }} - {{ product.price }}
+      <form action="{{ url_for('buy_product', product_id=product.id) }}" method="post" style="display:inline">
+        <button type="submit">Buy</button>
+      </form>
+    </li>
+    {% else %}
+    <li>No products found.</li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('add_product') }}">Add product</a>
+</body>
+</html>
