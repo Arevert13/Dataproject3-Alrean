@@ -23,10 +23,10 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
-data "archive_file" "get_products_zip" {
+data "archive_file" "get_product_zip" {
   type        = "zip"
-  source_dir  = "${var.lambda_dir}/get_products"
-  output_path = "${path.module}/get_products.zip"
+  source_dir  = "${var.lambda_dir}/get_product"
+  output_path = "${path.module}/get_product.zip"
 }
 
 data "archive_file" "add_product_zip" {
@@ -50,10 +50,10 @@ locals {
   }
 }
 
-resource "aws_lambda_function" "get_products" {
-  function_name    = "get-products-fn"
-  filename         = data.archive_file.get_products_zip.output_path
-  source_code_hash = data.archive_file.get_products_zip.output_base64sha256
+resource "aws_lambda_function" "get_product" {
+  function_name    = "get-product-fn"
+  filename         = data.archive_file.get_product_zip.output_path
+  source_code_hash = data.archive_file.get_product_zip.output_base64sha256
   role             = aws_iam_role.lambda_exec_role.arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.11"

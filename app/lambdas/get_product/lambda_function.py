@@ -1,11 +1,12 @@
 import json
-import os
-import psycopg2
-import boto3
+
 
 
 def lambda_handler(event, context):
-    """Retrieve all products from the database"""
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'action': 'get_product'})
+    }
     try:
         db_host = os.environ.get('DB_HOST')
         db_name = os.environ.get('DB_NAME')

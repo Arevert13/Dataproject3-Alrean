@@ -1,11 +1,10 @@
 import json
-import os
-import psycopg2
-import boto3
-from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
-    """Add a new product to the database"""
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'action': 'add_product'})
+    }
     try:
         if 'body' in event:
             body = json.loads(event['body']) if isinstance(event['body'], str) else event['body']
