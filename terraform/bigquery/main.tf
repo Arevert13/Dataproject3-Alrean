@@ -74,6 +74,22 @@ resource "google_datastream_stream" "rds_to_bq" {
   ]
 }
 
+resource "google_bigquery_table" "public_products" {
+  dataset_id = google_bigquery_dataset.ecommerce_analytics.dataset_id
+  table_id   = "public_products"
+  project    = var.project_id
+
+  schema = jsonencode([
+    { name = "id", type = "STRING", mode = "REQUIRED" },
+    { name = "name", type = "STRING", mode = "REQUIRED" },
+    { name = "price", type = "FLOAT", mode = "REQUIRED" },
+    { name = "description", type = "STRING", mode = "NULLABLE" },
+    { name = "available", type = "BOOLEAN", mode = "REQUIRED" },
+    { name = "created_at", type = "TIMESTAMP", mode = "REQUIRED" }
+  ])
+
+  deletion_protection = false
+}
 resource "google_bigquery_table" "products_analytics" {
   dataset_id = google_bigquery_dataset.ecommerce_analytics.dataset_id
   table_id   = "products_analytics"
@@ -91,7 +107,7 @@ SELECT
   available,
   created_at,
   CASE 
-    WHEN available = true THEN 'Disponible'
+    WHEN available THEN 'Disponible'
     ELSE 'Agotado'
   END as estado,
   CASE
