@@ -56,7 +56,7 @@ variable "lambda_dir" {
 
 variable "flask_dir" {
   description = "Path to Flask app directory"
-  default     = "../app/flask-app"
+  default     = "../app/flask"
 }
 
 variable "datastream_user" {

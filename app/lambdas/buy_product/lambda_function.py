@@ -1,11 +1,10 @@
 import json
-import os
-import psycopg2
-import boto3
-
 
 def lambda_handler(event, context):
-    """Mark a product as purchased (not available)"""
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'action': 'buy_product'})
+    }
     try:
         if 'body' in event:
             body = json.loads(event['body']) if isinstance(event['body'], str) else event['body']

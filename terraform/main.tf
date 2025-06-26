@@ -55,7 +55,7 @@ module "cloud_run" {
   region           = var.region
   project_id       = var.project_id
   flask_dir        = var.flask_dir
-  get_products_url = module.lambdas.get_products_invoke_arn
+  get_products_url = module.lambdas.get_product_invoke_arn
   add_product_url  = module.lambdas.add_product_invoke_arn
   buy_product_url  = module.lambdas.buy_product_invoke_arn
 }

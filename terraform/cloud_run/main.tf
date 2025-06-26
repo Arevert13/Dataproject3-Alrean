@@ -15,12 +15,14 @@ resource "null_resource" "build_flask_image" {
     EOT
   }
 
-  triggers = {
-    dockerfile_hash = filemd5("${var.flask_dir}/Dockerfile")
-  }
+ triggers = {
+  dockerfile_hash = filemd5("${var.flask_dir}/Dockerfile")
+}
+
 
   depends_on = [google_artifact_registry_repository.flask_repo]
 }
+
 
 resource "google_service_account" "cloud_run_sa" {
   account_id   = "flask-cloud-run-sa"
