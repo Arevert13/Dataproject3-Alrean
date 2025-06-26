@@ -34,6 +34,6 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot     = true
   db_subnet_group_name    = aws_db_subnet_group.this.name
   vpc_security_group_ids  = [aws_security_group.rds.id]
-  publicly_accessible     = true
+  publicly_accessible     = false
   parameter_group_name    = "default.postgres15"
 }
