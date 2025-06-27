@@ -57,14 +57,16 @@ resource "google_datastream_stream" "rds_to_bq" {
     }
   }
 
-  destination_config {
-    destination_connection_profile = google_datastream_connection_profile.bq_sink.id
-    bigquery_destination_config {
-      single_target_dataset {
-        dataset_id = google_bigquery_dataset.ecommerce_analytics.dataset_id
-      }
+destination_config {
+  destination_connection_profile = google_datastream_connection_profile.bq_sink.id
+  bigquery_destination_config {
+    single_target_dataset {
+      dataset_id = "projects/${var.project_id}/datasets/${google_bigquery_dataset.ecommerce_analytics.dataset_id}"
     }
   }
+}
+
+
 
   backfill_all {}
 

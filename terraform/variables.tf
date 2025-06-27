@@ -1,6 +1,6 @@
 variable "aws_region" {
   description = "AWS region"
-  default     = "eu-west-1"
+  type        = string
 }
 
 variable "region" {
@@ -10,68 +10,75 @@ variable "region" {
 
 variable "project_id" {
   description = "GCP project ID"
+  type = string
+}
+
+variable "vpc_cidr_block" {
+  description = "VPC CIDR block"
+  type        = string
+}
+
+variable "public_cidr_blocks" {
+  type = list(string)
+}
+
+variable "private_cidr_blocks" {
+  type = list(string)
+}
+
+variable "aws_availability_zones" {
+  type = list(string)
+}
+
+variable "project_label" {
+  type = string
+}
+
+variable "common_tags" {
+  type = map(string)
 }
 
 variable "project_name" {
-  description = "Project name label"
-  default     = "ordinal-thinker"
-}
-
-variable "vpc_cidr" {
-  default = "10.0.0.0/16"
-}
-
-variable "private1_cidr" {
-  default = "10.0.1.0/24"
-}
-
-variable "private2_cidr" {
-  default = "10.0.2.0/24"
-}
-
-variable "az1" {
-  default = "eu-west-1a"
-}
-
-variable "az2" {
-  default = "eu-west-1b"
+  description = "Name of the GCP project"
+  type        = string
 }
 
 variable "db_name" {
-  default = "products_db"
+  type = string
 }
 
 variable "db_username" {
-  default = "postgres_user"
+  type = string
 }
 
 variable "db_password" {
-  default = "postgres_pass123!"
+  type      = string
+  sensitive = true
 }
 
 variable "lambda_dir" {
-  description = "Path to lambda source directories"
-  default     = "../app/lambdas"
+  type = string
 }
 
 variable "flask_dir" {
-  description = "Path to Flask app directory"
-  default     = "../app/flask"
+  type = string
 }
 
 variable "datastream_user" {
   description = "User for Datastream"
+  type        = string
 }
 
 variable "datastream_password" {
   description = "Password for Datastream"
+  type        = string
   sensitive   = true
 }
 
 variable "publication" {
-  default = "my_publication"
+  type = string
 }
 
 variable "replication_slot" {
-  default = "my_slot"
+  type = string
 }

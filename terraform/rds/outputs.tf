@@ -1,19 +1,20 @@
 output "address" {
-  value = aws_db_instance.postgres.address
+  description = "Address of the RDS instance"
+  value       = aws_db_instance.postgres.address
 }
 
 output "db_name" {
-  value = aws_db_instance.postgres.db_name
+  description = "Database name"
+  value       = aws_db_instance.postgres.db_name
 }
 
 output "username" {
-  value = aws_db_instance.postgres.username
+  description = "Database master username"
+  value       = aws_db_instance.postgres.username
 }
 
 output "password" {
-  value = aws_db_instance.postgres.password
+  description = "Database master password"
+  value       = var.password
 }
 
-output "security_group_id" {
-  value = aws_security_group.rds.id
-}

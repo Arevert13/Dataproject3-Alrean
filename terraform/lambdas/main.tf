@@ -61,7 +61,9 @@ resource "aws_lambda_function" "get_product" {
 
   vpc_config {
     subnet_ids         = var.subnet_ids
-    security_group_ids = [var.security_group_id]
+    security_group_ids = var.security_group_ids
+
+
   }
 
   environment {
@@ -80,7 +82,9 @@ resource "aws_lambda_function" "add_product" {
 
   vpc_config {
     subnet_ids         = var.subnet_ids
-    security_group_ids = [var.security_group_id]
+    security_group_ids = var.security_group_ids
+
+
   }
 
   environment {
@@ -97,10 +101,12 @@ resource "aws_lambda_function" "buy_product" {
   runtime          = "python3.11"
   timeout          = 15
 
-  vpc_config {
-    subnet_ids         = var.subnet_ids
-    security_group_ids = [var.security_group_id]
-  }
+ vpc_config {
+  subnet_ids         = var.subnet_ids
+  security_group_ids = var.security_group_ids
+
+}
+
 
   environment {
     variables = local.lambda_env
