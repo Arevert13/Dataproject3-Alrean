@@ -33,7 +33,7 @@ resource "google_service_account" "cloud_run_sa" {
 resource "google_cloud_run_v2_service" "flask_app" {
   name     = "flask-app"
   location = var.region
-  project  = var.project_id
+  ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
     service_account = google_service_account.cloud_run_sa.email
@@ -63,12 +63,11 @@ resource "google_cloud_run_v2_service" "flask_app" {
   }
 
   traffic {
-    percent         = 100
-   
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+    percent = 100
   }
-
-  depends_on = [null_resource.build_flask_image]
 }
+
 
 resource "google_cloud_run_service_iam_member" "allow_all" {
   location = google_cloud_run_v2_service.flask_app.location

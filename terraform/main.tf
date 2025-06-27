@@ -21,41 +21,53 @@ provider "google" {
   region  = var.region
 }
 
-module "network" {
-  source        = "./aws_network"
-  vpc_cidr      = var.vpc_cidr
-  private1_cidr = var.private1_cidr
-  private2_cidr = var.private2_cidr
-  az1           = var.az1
-  az2           = var.az2
+
+module "aws_network" {
+  source                 = "./aws_network"
+  vpc_cidr_block         = var.vpc_cidr_block
+  public_cidr_blocks     = var.public_cidr_blocks
+  private_cidr_blocks    = var.private_cidr_blocks
+  aws_availability_zones = var.aws_availability_zones
+  project_label          = var.project_label
+  common_tags            = var.common_tags
 }
 
 module "rds" {
-  source     = "./rds"
-  vpc_id     = module.network.vpc_id
-  subnet_ids = module.network.private_subnet_ids
-  db_name    = var.db_name
-  username   = var.db_username
-  password   = var.db_password
+  source                  = "./rds"
+  vpc_id                  = module.aws_network.vpc_id
+  subnet_ids              = module.aws_network.public_subnet_ids
+  vpc_security_group_ids  = [module.aws_network.rds_security_group_id]
+  db_subnet_group_name    = module.aws_network.private_db_subnet_group_name
+  parameter_group_name    = module.aws_network.parameter_group_name
+
+  db_name                 = var.db_name
+  username                = var.db_username
+  password                = var.db_password
 }
+
+
+
+
 
 module "lambdas" {
   source            = "./lambdas"
-  subnet_ids        = module.network.private_subnet_ids
-  security_group_id = module.rds.security_group_id
-  db_host           = module.rds.address
-  db_name           = module.rds.db_name
-  db_user           = module.rds.username
-  db_password       = module.rds.password
-  lambda_dir        = var.lambda_dir
+  subnet_ids        = module.aws_network.private_subnet_ids
+security_group_ids = [module.aws_network.lambda_security_group_id]
+
+  db_host     = module.rds.address
+  db_name     = module.rds.db_name
+  db_user     = module.rds.username
+  db_password = module.rds.password
+  lambda_dir  = var.lambda_dir
 }
+
 
 module "cloud_run" {
   source           = "./cloud_run"
   region           = var.region
   project_id       = var.project_id
   flask_dir        = var.flask_dir
-  get_products_url = module.lambdas.get_product_invoke_arn
+  get_products_url = module.lambdas.get_products_invoke_arn
   add_product_url  = module.lambdas.add_product_invoke_arn
   buy_product_url  = module.lambdas.buy_product_invoke_arn
 }
