@@ -46,9 +46,6 @@ module "rds" {
 }
 
 
-
-
-
 module "lambdas" {
   source            = "./lambdas"
   subnet_ids        = module.aws_network.private_subnet_ids
@@ -67,9 +64,9 @@ module "cloud_run" {
   region           = var.region
   project_id       = var.project_id
   flask_dir        = var.flask_dir
-  get_products_url = module.lambdas.get_products_invoke_arn
-  add_product_url  = module.lambdas.add_product_invoke_arn
-  buy_product_url  = module.lambdas.buy_product_invoke_arn
+  get_products_url = module.lambdas.get_products_url
+  add_product_url  = module.lambdas.add_product_url
+  buy_product_url  = module.lambdas.buy_product_url
 }
 
 module "bigquery" {
@@ -84,3 +81,12 @@ module "bigquery" {
   publication         = var.publication
   replication_slot    = var.replication_slot
 }
+module "api_gateway" {
+  source = "./api_gateway"
+
+  get_product_lambda_arn = module.lambdas.get_product_lambda_arn
+  add_product_lambda_arn = module.lambdas.add_product_lambda_arn
+  buy_product_lambda_arn = module.lambdas.buy_product_lambda_arn
+  region                 = var.aws_region
+}
+
