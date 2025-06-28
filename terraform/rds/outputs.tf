@@ -17,4 +17,8 @@ output "password" {
   description = "Database master password"
   value       = var.password
 }
+output "init_schema_id" {
+  description = "ID of the schema initialization resource"
+  value       = null_resource.init_schema.id
+}
 
