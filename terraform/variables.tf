@@ -1,11 +1,15 @@
 variable "aws_region" {
   description = "AWS region"
   type        = string
+  default     = "eu-central-1"
 }
 
+
 variable "region" {
-  description = "GCP region"
-  default     = "europe-west1"
+  description = "AWS region"
+  type        = string
+  default     = "eu-central-1"
+  
 }
 
 variable "project_id" {
@@ -57,8 +61,10 @@ variable "db_password" {
 }
 
 variable "lambda_dir" {
-  type = string
+  description = "Path to lambda source directories"
+  default     = "../app/lambdas"
 }
+
 
 variable "flask_dir" {
   type = string
@@ -82,3 +88,19 @@ variable "publication" {
 variable "replication_slot" {
   type = string
 }
+variable "get_product_lambda_arn" {
+  description = "ARN de la lambda get-product"
+  type        = string
+}
+
+variable "add_product_lambda_arn" {
+  description = "ARN de la lambda add-product"
+  type        = string
+}
+
+variable "buy_product_lambda_arn" {
+  description = "ARN de la lambda buy-product"
+  type        = string
+
+}
+
