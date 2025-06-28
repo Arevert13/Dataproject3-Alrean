@@ -2,6 +2,11 @@ variable "region" {
   description = "AWS region for the Lambda integration URIs"
   type        = string
 }
+variable "stage_name" {
+  description = "API Gateway stage name"
+  type        = string
+  default     = "prod"
+}
 
 variable "get_product_lambda_arn" {
   description = "ARN of the get_product Lambda function"

@@ -81,6 +81,7 @@ module "bigquery" {
   db_name             = var.db_name
   publication         = var.publication
   replication_slot    = var.replication_slot
+  db_init_dep         = module.rds.init_schema_id
 }
 module "api_gateway" {
   source = "./api_gateway"
@@ -89,5 +90,6 @@ module "api_gateway" {
   add_product_lambda_arn = module.lambdas.add_product_lambda_arn
   buy_product_lambda_arn = module.lambdas.buy_product_lambda_arn
   region                 = var.aws_region
+    stage_name             = "prod"
 }
 

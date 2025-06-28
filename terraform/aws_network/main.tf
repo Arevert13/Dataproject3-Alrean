@@ -168,8 +168,5 @@ resource "aws_db_parameter_group" "pg_logical" {
     value        = "1"
     apply_method = "pending-reboot"
   }
-
-  tags = merge(var.common_tags, {
-    Purpose = "Logical Replication Params for ${var.project_label}"
-  })
+  
 }

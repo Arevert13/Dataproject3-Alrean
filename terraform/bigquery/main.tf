@@ -9,6 +9,12 @@ resource "google_bigquery_dataset" "ecommerce_analytics" {
   }
 }
 
+resource "null_resource" "db_dependency" {
+  triggers = {
+    id = var.db_init_dep
+  }
+}
+
 resource "google_datastream_connection_profile" "rds_source" {
   connection_profile_id = "rds-source"
   location              = var.region
@@ -72,7 +78,9 @@ destination_config {
 
   depends_on = [
     google_datastream_connection_profile.rds_source,
-    google_datastream_connection_profile.bq_sink
+    google_datastream_connection_profile.bq_sink,
+    google_bigquery_table.public_products,
+    null_resource.db_dependency,
   ]
 }
 
