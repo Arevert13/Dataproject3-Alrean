@@ -76,6 +76,9 @@ resource "aws_api_gateway_deployment" "this" {
   triggers = {
     redeployment = timestamp()
   }
+    lifecycle {
+    create_before_destroy = true
+  }
 
   depends_on = [
   aws_api_gateway_integration.get_products_integration,
