@@ -35,5 +35,26 @@ resource "aws_db_instance" "postgres" {
   db_subnet_group_name    = aws_db_subnet_group.this.name
   vpc_security_group_ids  = [aws_security_group.rds.id]
   publicly_accessible     = true
-  parameter_group_name    = "default.postgres15"
+  parameter_group_name    = var.parameter_group_name
+  apply_immediately       = true
+  
+}
+resource "null_resource" "init_rds_schema" {
+  # se ejecuta sólo después de que cambie parameter_group_name o la dirección
+  depends_on = [ aws_db_instance.postgres ]
+
+  triggers = {
+    pg_name = var.parameter_group_name
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      export PGPASSWORD='${var.password}'
+      psql \
+        --host='${aws_db_instance.postgres.address}' \
+        --username='${var.username}' \
+        --dbname='${var.db_name}' \
+        --file='${path.module}/../scripts/schema.sql'
+    EOT
+  }
 }
