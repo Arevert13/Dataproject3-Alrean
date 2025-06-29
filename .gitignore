@@ -22,9 +22,6 @@ terraform.tfvars.json
 .terraform/
 .terraform/
 
-# Terraform module and provider caches
-.terraform/modules/
-.terraform/providers/
 
 # Local .zip packages
 *.zip
