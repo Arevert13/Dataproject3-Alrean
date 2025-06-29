@@ -1,43 +1,48 @@
-# Terraform
+# Terraform state and backup files
 *.tfstate
 *.tfstate.*
-.terraform/
-.terraform.lock.hcl
+*.backup
+*.tfvars
+*.tfvars.json
+terraform.tfstate.backup
 terraform.tfvars
+terraform.tfvars.json
+
+# Terraform plan files
 *.tfplan
+*.tfplan.json
+
+# Terraform lock and workspace files
+.terraform.lock.hcl
+*.terraform.lock.json
+.terraform.workspace
+*.terraform.workspace.json
+
+# Terraform directories
+.terraform/
+.terraform/
+
+# Terraform module and provider caches
+.terraform/modules/
+.terraform/providers/
+
+# Local .zip packages
 *.zip
-terraform/lambda_temp.zip
-CLAUDE.md
 
-# AWS
-.aws/
-
-# GCP
-.gcp/
-*.json
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+# AWS Lambda build artifacts
 build/
+app/**/build/
+app/**/.python_packages/
+# Carpetas de compilación/paquete
+app/lambdas/*/build/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
 
-# OS
+
+# IDE and OS files
 .DS_Store
-Thumbs.db
+.idea/
+.vscode/
+*.swp
 
-# Logs
-*.log
+# Optional: JSON outputs or logs you don't want in Git
+out.json
