@@ -14,7 +14,9 @@ def lambda_handler(event, context):
         name = body.get('name')
         price = body.get('price')
         description = body.get('description', '')
-        if not name or not price:
+        available = body.get('available', True)
+
+        if not name or price is None:
             return response(400, {'error': 'name y price son campos requeridos'})
 
         try:
@@ -28,22 +30,27 @@ def lambda_handler(event, context):
         conn = connect_to_db()
         cursor = conn.cursor()
 
-        # ✅ Ejecuta el schema.sql (solo crea la tabla si no existe)
-        try:
-            with open(os.path.join(os.path.dirname(__file__), 'schema.sql'), 'r') as f:
-                schema_sql = f.read()
-                cursor.execute(schema_sql)
-                conn.commit()
-        except Exception as e:
-            print(f"Error ejecutando schema.sql: {e}")
+        # ✅ Crea la tabla si no existe (opcional)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS products (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            price DECIMAL(10,2) NOT NULL,
+            description TEXT,
+            available BOOLEAN DEFAULT true,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """)
+        conn.commit()
 
         # ✅ Inserta el nuevo producto
         insert_query = """
-            INSERT INTO productos (nombre, stock)
-            VALUES (%s, %s)
-            RETURNING id, nombre, stock;
+            INSERT INTO products (name, price, description, available)
+            VALUES (%s, %s, %s, %s)
+            RETURNING id, name, price, description, available, created_at;
+
         """
-        cursor.execute(insert_query, (name, 10))
+        cursor.execute(insert_query, (name, price, description, available))
         new_product = cursor.fetchone()
         conn.commit()
 
@@ -52,8 +59,11 @@ def lambda_handler(event, context):
 
         product_data = {
             'id': new_product[0],
-            'nombre': new_product[1],
-            'stock': new_product[2]
+            'name': new_product[1],
+            'price': float(new_product[2]),
+            'description': new_product[3],
+            'available': new_product[4],
+            'created_at': new_product[5].isoformat() if new_product[5] else None
         }
 
         return response(201, {
